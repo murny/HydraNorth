@@ -43,5 +43,8 @@ Hydranorth::Application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  config.action_mailer.default_url_options = { :host => 'localhost' }
+  config.action_mailer.default_url_options = { :host => 'localhost', port: 3000 }
 end
+
+# Required when using Rails.application.routes.url_helpers from outside the request/response life cycle (models, jobs, lib)
+Rails.application.routes.default_url_options = { host: 'localhost', port: 3000 }

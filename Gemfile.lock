@@ -17,6 +17,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.0.2)
+    aasm (4.11.1)
     actionmailer (4.2.7.1)
       actionpack (= 4.2.7.1)
       actionview (= 4.2.7.1)
@@ -207,6 +208,8 @@ GEM
     erubis (2.7.0)
     execjs (2.6.0)
     extlib (0.9.16)
+    ezid-client (1.5.0)
+      hashie
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.5.0)
@@ -720,6 +723,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aasm
   activerecord-session_store
   better_errors
   binding_of_caller
@@ -734,6 +738,7 @@ DEPENDENCIES
   database_cleaner
   devise
   devise-guests (~> 0.3)
+  ezid-client
   factory_girl_rails
   google-api-client (~> 0.7.1)
   jbuilder (~> 2.0)

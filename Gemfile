@@ -3,6 +3,9 @@ source 'https://rubygems.org'
 # Use database to store sessions
 gem 'activerecord-session_store'
 
+gem 'aasm'
+gem 'ezid-client'
+
 # Avoid cannot load such file -- google/api_client
 gem 'google-api-client', '~> 0.7.1'
 
