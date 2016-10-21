@@ -1,6 +1,6 @@
 module Hydranorth
   module GenericFile
-    module DOI_States
+    module DOIStates
       include AASM
 
       aasm do
