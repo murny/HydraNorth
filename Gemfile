@@ -5,6 +5,7 @@ gem 'activerecord-session_store'
 
 gem 'aasm'
 gem 'ezid-client'
+gem 'resque'
 
 # Avoid cannot load such file -- google/api_client
 gem 'google-api-client', '~> 0.7.1'
