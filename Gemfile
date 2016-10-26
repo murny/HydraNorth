@@ -79,8 +79,8 @@ gem 'rest-client'
 gem 'noid', '~> 0.8'
 
 group :test do
-  gem 'vcr'
-  gem 'webmock'
+  gem 'vcr', require: false
+  gem 'webmock', require: false
   gem "rspec-its"
   gem "ci_reporter_rspec"
   gem "timecop"
