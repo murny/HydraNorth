@@ -23,6 +23,8 @@ describe Hydranorth::DOIService do
         expect(ezid_identifer).not_to eq(nil)
         expect(ezid_identifer.datacite_publisher).to eq(Hydranorth::DOIService::PUBLISHER)
         expect(ezid_identifer.datacite_title).to eq(generic_file.title.first)
+        expect(ezid_identifer.datacite_resourcetype).to eq('Text/Book')
+        expect(ezid_identifer.datacite_publicationyear).to eq('(:unav)')
         expect(ezid_identifer.status).to eq(Ezid::Status::PUBLIC)
         expect(generic_file.doi).not_to eq(nil)
       end
