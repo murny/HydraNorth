@@ -18,6 +18,9 @@ GEM
   specs:
     Ascii85 (1.0.2)
     aasm (4.11.1)
+    aasm-active_fedora (0.1.2)
+      aasm (~> 4.11)
+      sufia (~> 6.0)
     actionmailer (4.2.7.1)
       actionpack (= 4.2.7.1)
       actionview (= 4.2.7.1)
@@ -733,6 +736,7 @@ PLATFORMS
 
 DEPENDENCIES
   aasm
+  aasm-active_fedora
   activerecord-session_store
   better_errors
   binding_of_caller
@@ -784,4 +788,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.13.5
+   1.13.6

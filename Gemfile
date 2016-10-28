@@ -4,7 +4,9 @@ source 'https://rubygems.org'
 gem 'activerecord-session_store'
 
 gem 'aasm'
+gem 'aasm-active_fedora'
 gem 'ezid-client'
+
 gem 'resque'
 
 # Avoid cannot load such file -- google/api_client
