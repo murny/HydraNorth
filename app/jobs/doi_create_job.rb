@@ -3,8 +3,6 @@ class DOICreateJob < ActiveJob::Base
 
   def perform(generic_file_id)
     file = GenericFile.find(generic_file_id)
-    if file
-      Hydranorth::DOIService.create(file)
-    end
+    Hydranorth::DOIService.create(file) unless file
   end
 end

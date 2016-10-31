@@ -52,24 +52,24 @@ class GenericFile < ActiveFedora::Base
     self.resource_type.include? Sufia.config.special_types['cstr']
   end
 
+  def doi_fields_present?
+    self && self.title.present? && self.creator.present? && self.resource_type.present? && Sufia.config.admin_resource_types[self.resource_type.first]
+  end
 
   private
-    # AFTER SAFE callback
-    # change state of generic file and DOI
+
     def handle_doi_states
-      # Has it been minited already?
       if doi.blank?
-        # TODO need to handle if in unminted state...job already running for minitng...
-        return if !doi_fields_filled? || exclude? # if doi info is missing or already exclude then no minting required
-        # if excluded? # If boolean is set to exclude
-        #  excluded
-        # else
-          created
-        # end
+        return if private? || excluded? || !doi_fields_present?
+        if !unminted?
+          created!
+        end
+        DOICreateJob.perform_later(id)
       else
-        # Handle case where if in unsynced state already...job already running for updating
-        if doi_fields_changed? || doi_visibility_changed?
-          altered
+        if doi_fields_changed? || visibility_changed? # TODO: not enough, could be changing from public to authenticated states or vice versa...
+          aasm_state = 'unsynced' # altered or readded
+          save!
+          DOIUpdateJob.perform_later(id)
         end
       end
     end
@@ -80,13 +80,4 @@ class GenericFile < ActiveFedora::Base
       doi_fields.any? {|k| previous_changes.key?(k) }
     end
 
-    def doi_fields_filled?
-      self && self.title.present? && self.creator.present? && self.resource_type.present?
-    end
-
-    def doi_visibility_changed?
-      false
-      # TODO
-      #permissions_previously_changed? && private?
-    end
 end

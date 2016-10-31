@@ -9,27 +9,22 @@ module Hydranorth
         include AASM
 
         aasm do
-          state :new, :initial => true
+          state :unpublished, :initial => true
           state :unminted
-          state :exclude
+          state :excluded
           state :available
           state :unsynced
-          state :unavailable
 
           event :created do
-            transitions from: :new, to: :unminted
-
-            #call minting job -- successful sets to available
+            transitions from: :unpublished, to: :unminted
           end
 
-          event :excluded do
-            transitions from: :new, to: :exclude
+          event :exclude do
+            transitions from: :unpublished, to: :excluded
           end
 
-          event :included do
-            transitions from: :exclude, to: :unminted
-
-            #call miniting job -- successful sets to available
+          event :include do
+            transitions from: :excluded, to: :unpublished
           end
 
           event :minted do
@@ -42,14 +37,14 @@ module Hydranorth
 
           event :synced do
             transitions from: :unsynced, to: :available
-
-            # call update job if update-- successful sets state to available
           end
 
           event :removed do
-            transitions from: :unsynced, to: :unavailable
+            transitions from: :unsynced, to: :unpublished
+          end
 
-            # call remove job if setting unavailable-- successful sets state to unavailable
+          event :readded do
+            transitions from: :unpublished,  to: :unsynced
           end
         end
 

@@ -2,9 +2,7 @@ class DOIUpdateJob < ActiveJob::Base
   queue_as :default
 
   def perform(generic_file_id)
-    work = GenericFile.find(generic_file_id)
-    # TODO
-    # Create new_metadata hash off work object
-    Hydranorth::DOIService.update(work.doi, new_metadata)
+    file = GenericFile.find(generic_file_id)
+    Hydranorth::DOIService.update(file) unless file
   end
 end
