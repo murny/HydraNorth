@@ -1,0 +1,109 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://ezid.cdlib.org/shoulder/doi:10.5072/FK2
+    body:
+      encoding: UTF-8
+      string: |-
+        _status: public
+        _profile: datacite
+        datacite.creator: John Doe
+        datacite.publisher: University of Alberta Libraries
+        datacite.publicationyear: (:unav)
+        datacite.resourcetype: Text/Book
+        datacite.title: Test Title
+        _target: http://localhost:3000/files/2801pg356
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - ezid.cdlib.org
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Authorization:
+      - Basic YXBpdGVzdDphcGl0ZXN0
+  response:
+    status:
+      code: 201
+      message: CREATED
+    headers:
+      Date:
+      - Tue, 25 Oct 2016 21:09:42 GMT
+      Server:
+      - Apache/2.2.17 (Unix) mod_ssl/2.2.17 OpenSSL/1.0.1k-fips mod_wsgi/4.4.9 Python/2.7.6
+      Content-Length:
+      - '55'
+      Vary:
+      - Accept-Language,Cookie
+      Content-Language:
+      - en
+      Content-Type:
+      - text/plain; charset=UTF-8
+    body:
+      encoding: UTF-8
+      string: 'success: doi:10.5072/FK2NS0S242 | ark:/b5072/fk2ns0s242'
+    http_version:
+  recorded_at: Tue, 25 Oct 2016 21:09:42 GMT
+- request:
+    method: get
+    uri: https://ezid.cdlib.org/id/doi:10.5072/FK2NS0S242
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - ezid.cdlib.org
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Authorization:
+      - Basic YXBpdGVzdDphcGl0ZXN0
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 25 Oct 2016 21:09:43 GMT
+      Server:
+      - Apache/2.2.17 (Unix) mod_ssl/2.2.17 OpenSSL/1.0.1k-fips mod_wsgi/4.4.9 Python/2.7.6
+      Content-Length:
+      - '435'
+      Vary:
+      - Accept-Language,Cookie
+      Content-Language:
+      - en
+      Content-Type:
+      - text/plain; charset=UTF-8
+    body:
+      encoding: UTF-8
+      string: |
+        success: doi:10.5072/FK2NS0S242
+        datacite.publisher: University of Alberta Libraries
+        _profile: datacite
+        _export: yes
+        datacite.creator: John Doe
+        datacite.publicationyear: (:unav)
+        datacite.resourcetype: Text/Book
+        _datacenter: CDL.CDL
+        _updated: 1477429782
+        _target: http://localhost:3000/files/2801pg356
+        datacite.title: Test Title
+        _ownergroup: apitest
+        _owner: apitest
+        _shadowedby: ark:/b5072/fk2ns0s242
+        _created: 1477429782
+        _status: public
+    http_version:
+  recorded_at: Tue, 25 Oct 2016 21:09:43 GMT
+recorded_with: VCR 3.0.3
