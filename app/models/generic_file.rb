@@ -58,28 +58,28 @@ class GenericFile < ActiveFedora::Base
 
   private
 
-    def handle_doi_states
-      if doi.blank?
-        return if private? || excluded? || !doi_fields_present?
-        if !unminted?
-          created!
-          DOICreateJob.perform_later(id)
-        end
-      else
-        if doi_fields_changed? || visibility_changed? # TODO: not enough, could be changing from public to authenticated states or vice versa...
-          if !unsynced?
-            aasm_state = 'unsynced' # altered or readded
-            save!
-            DOIUpdateJob.perform_later(id)
-          end
+  def handle_doi_states
+    if doi.blank?
+      return if private? || excluded? || !doi_fields_present?
+      if !unminted?
+        created!
+        DOICreateJob.perform_later(id)
+      end
+    else
+      if doi_fields_changed? || visibility_changed? # TODO: not enough, could be changing from public to authenticated states or vice versa...
+        if !unsynced?
+          aasm_state = 'unsynced' # altered or readded
+          save!
+          DOIUpdateJob.perform_later(id)
         end
       end
     end
+  end
 
 
-    def doi_fields_changed?
-      doi_fields = [:title, :creator, :year_created, :resource_type]
-      doi_fields.any? {|k| previous_changes.key?(k) }
-    end
+  def doi_fields_changed?
+    doi_fields = [:title, :creator, :year_created, :resource_type]
+    doi_fields.any? {|k| previous_changes.key?(k) }
+  end
 
 end
