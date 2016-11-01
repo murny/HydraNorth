@@ -38,6 +38,7 @@ module Hydranorth
 
       def visibility_will_change_with_lifecycle_hooks!
         @visibility_lifecycle_previous_state = visibility
+        visibility_will_change_without_lifecycle_hooks!
       end
 
       def previous_visibility
