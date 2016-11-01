@@ -53,7 +53,7 @@ class GenericFile < ActiveFedora::Base
   end
 
   def doi_fields_present?
-    self && self.title.present? && self.creator.present? && self.resource_type.present? && Sufia.config.admin_resource_types[self.resource_type.first]
+    self && self.title.present? && self.creator.present? && self.resource_type.present? && Sufia.config.admin_resource_types[self.resource_type.first].present?
   end
 
   private
@@ -63,13 +63,15 @@ class GenericFile < ActiveFedora::Base
         return if private? || excluded? || !doi_fields_present?
         if !unminted?
           created!
+          DOICreateJob.perform_later(id)
         end
-        DOICreateJob.perform_later(id)
       else
         if doi_fields_changed? || visibility_changed? # TODO: not enough, could be changing from public to authenticated states or vice versa...
-          aasm_state = 'unsynced' # altered or readded
-          save!
-          DOIUpdateJob.perform_later(id)
+          if !unsynced?
+            aasm_state = 'unsynced' # altered or readded
+            save!
+            DOIUpdateJob.perform_later(id)
+          end
         end
       end
     end
