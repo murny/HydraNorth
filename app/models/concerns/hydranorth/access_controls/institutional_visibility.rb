@@ -72,7 +72,6 @@ module Hydranorth
       end
 
       def revoke_institutional_visibility!
-        visibility_will_change!
         set_read_groups([], INSTITUTIONAL_PROVIDERS)
       end
 
