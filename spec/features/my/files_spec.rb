@@ -10,14 +10,14 @@ describe 'myfiles', :type => :feature do
   let(:other_user) { FactoryGirl.create :user }
 
   let!(:my_file) do
-    GenericFile.new.tap do |r|
+    FactoryGirl.build(:generic_file) do |r|
       r.apply_depositor_metadata user
       r.save!
     end
   end
 
   let!(:edit_shared_with_me) do
-    GenericFile.new.tap do |r|
+    FactoryGirl.build(:generic_file) do |r|
       r.apply_depositor_metadata other_user
       r.edit_users += [user.user_key]
       r.save!
@@ -25,7 +25,7 @@ describe 'myfiles', :type => :feature do
   end
 
   let!(:read_shared_with_me) do
-    GenericFile.new.tap do |r|
+    FactoryGirl.build(:generic_file) do |r|
       r.apply_depositor_metadata other_user
       r.read_users += [user.user_key]
       r.save!

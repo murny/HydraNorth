@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'collection', :type => :feature do
+describe 'users should not see edit collection', :type => :feature do
   let(:admin) { FactoryGirl.create(:admin) }
   let(:jill) { FactoryGirl.create(:jill) }
   let!(:official_collection) do
@@ -36,7 +36,7 @@ describe 'collection', :type => :feature do
 
   context 'admin' do
     before do
-      sign_in admin 
+      sign_in admin
     end
     it 'should be able to see edit for admin collection' do
       visit collections.collection_path(admin_collection)
