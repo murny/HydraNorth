@@ -92,6 +92,49 @@ The shell script `bin/reset-all` runs these commands:
  rake db:reset
 ```
 
+## Docker
+This project comes with a docker setup, to run make sure you have docker and docker-compose installed:
+
+  1. [Install Docker](https://docs.docker.com/engine/installation/)
+  2. [Install Docker Compose](https://docs.docker.com/compose/install/)
+
+Once you have these installed, simply git clone this project down and run:
+ - `docker-compose up -d` (will take awhile on first try, as it needs to download and provision everything, so maybe go for a coffee or something)
+
+Now that everything is up and running, you can setup the rails database:
+ - `docker-compose run web rake db:setup`
+
+Then checkout ERA by going to `localhost:9000` (feel free to change the port)
+
+### Running tests?
+
+If you want to run the test suite, simply start up all the docker containers via:
+
+- `docker-compose up -d`
+
+Then you can setup the test database:
+ - `docker-compose run -e "RAILS_ENV=test" web rake db:create && rake db:migrate`
+
+Then you can run the test suite via rspec:
+ - `docker-compose run -e "RAILS_ENV=test" web rspec`
+
+### Common gotchas?
+
+1. We are reusing the same solr for test and dev. This may cause issues between data. This shouldn't matter to much, but just be away of this if things are getting corrupted. So for example if you rake db:setup the development environment, do not rake db:setup the test environment as the seeds will fail when interacting with collection/active fedora objmects. You do not need the seeds for test environment anyways. Simply just use `db:create && rake db:migrate`
+
+2. If your having issues, logs are the best place to first look at what has went wrong:
+
+- `docker-compose logs` to check all container logs
+
+Better yet you can check an individual container log by supplying the container name to the previous command as such:
+- `docker-compose logs web`
+
+3. Common issue could be the webpage is not rendering when you go to `localhost:9000`. This could be server hasn't started due to a bad stop and exiting of the container, thus leaving a pid file in the tmp directory. To fix this, cleanup the pid file via:
+
+- `sudo rm -rf /tmp/pids/server.pid`
+
+4. Docker can be resource intensive. Test may fail due to slowness/timeouts. As well when attempting to provison the database, this may fail due to Mysql container not being fully initialized at the right moment. Simply wait, or close some other processes.
+
 Batch ingest
 ---
 
