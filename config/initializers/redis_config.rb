@@ -1,12 +1,14 @@
-rails_root = ENV['RAILS_ROOT'] || File.dirname(__FILE__) + '/../..'
-rails_env = ENV['RAILS_ENV'] || 'development'
+require 'redis'
 
-# use config/redis.yml to load settings
-redis_config_path = "#{rails_root}/config/redis.yml"
-redis_config = YAML.load(ERB.new(IO.read(redis_config_path)).result)
+# We should not even have a redis.yml file...
+# Just use REDIS_URL or fallback to the defaults which redis does automagically
+# Have to undo this stupid if we are using a ENV VAR now...
 
 # initialize redis connection
-Resque.redis = redis_config[rails_env]
-
-# pull out the parsed redis driver from resque
-$redis = Resque.redis.instance_eval{@redis}
+if ENV['REDIS_URL']
+  $redis = Redis.new
+else
+  # use config/redis.yml to load settings
+  redis_config = YAML.load(ERB.new(IO.read(Rails.root + 'config' + 'redis.yml')).result)[Rails.env]
+  $redis = Redis.new(redis_config)
+end
