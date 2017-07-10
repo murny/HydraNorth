@@ -23,7 +23,6 @@ gem 'rdf-turtle', '1.1.7'
 # pin this to post-CVE 2017-5946
 gem 'rubyzip', '~> 1.2.1'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.7.1'
 
@@ -42,15 +41,12 @@ gem 'coffee-rails', '~> 4.1.0'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-gem "devise"
-gem "devise-guests", "~> 0.3"
-gem "omniauth-shibboleth"
-
-# clamav ruby bindings
-gem "clamav"
+gem 'devise'
+gem 'devise-guests', '~> 0.3'
+gem 'omniauth-shibboleth'
 
 # for migration reading the license file
-gem "pdf-reader", require: false
+gem 'pdf-reader', require: false
 
 # to generate sitemap for google scholar et al
 gem 'sitemap', git: 'https://github.com/ualbertalib/rails-sitemap.git'
@@ -63,25 +59,30 @@ gem 'noid', '~> 0.8'
 # pin this to post-USN-3271-1
 gem 'nokogiri', '~> 1.7.2'
 
+group :production do
+  # clamav ruby bindings
+  gem 'clamav'
+end
+
 group :test do
-  gem "capybara"
-  gem "capybara-select2"
-  gem "ci_reporter_rspec", require: false
-  gem "database_cleaner"
-  gem "poltergeist", "~> 1.5"
-  gem "show_me_the_cookies"
-  gem "timecop"
+  gem 'capybara'
+  gem 'capybara-select2'
+  gem 'ci_reporter_rspec', require: false
+  gem 'database_cleaner'
+  gem 'poltergeist', '~> 1.5'
+  gem 'show_me_the_cookies'
+  gem 'timecop'
   gem 'vcr', require: false
   gem 'webmock', require: false
 end
 
 group :development, :test do
-  gem "byebug"
-  gem "rspec-rails"
-  gem "ruby-debug-passenger"
-  gem "selenium-webdriver" # used in spec-views (legacy?)
-  gem "jettywrapper"
-  gem "factory_girl_rails"
+  gem 'byebug'
+  gem 'rspec-rails'
+  gem 'ruby-debug-passenger'
+  gem 'selenium-webdriver' # used in spec-views (legacy?)
+  gem 'jettywrapper'
+  gem 'factory_girl_rails'
   gem 'brakeman', require: false
   gem 'pry-byebug'
   gem 'pry-rails'
@@ -89,8 +90,8 @@ group :development, :test do
 end
 
 group :development do
-  gem "better_errors"
-  gem "binding_of_caller"
+  gem 'better_errors'
+  gem 'binding_of_caller'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'

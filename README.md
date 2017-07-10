@@ -93,47 +93,97 @@ The shell script `bin/reset-all` runs these commands:
 ```
 
 ## Docker
-This project comes with a docker setup, to run make sure you have docker and docker-compose installed:
+This project comes with a docker setup
 
-  1. [Install Docker](https://docs.docker.com/engine/installation/)
-  2. [Install Docker Compose](https://docs.docker.com/compose/install/)
+### Step 1: Make sure you have docker and docker-compose installed:
 
-Once you have these installed, simply git clone this project down and run:
- - `docker-compose up -d` (will take awhile on first try, as it needs to download and provision everything, so maybe go for a coffee or something)
+1. [Install Docker](https://docs.docker.com/engine/installation/)
+2. [Install Docker Compose](https://docs.docker.com/compose/install/)
 
-Now that everything is up and running, you can setup the rails database:
- - `docker-compose run web rake db:setup`
+#### Need more help?
 
-Then checkout ERA by going to `localhost:9000` (feel free to change the port)
+##### OSX / Windows
+- If you are on Mac, check out [Docker for Mac](https://docs.docker.com/docker-for-mac/)
+- If you are on Windows, check out [Docker for Windows](https://docs.docker.com/docker-for-windows/)
 
-### Running tests?
+These will install `docker`, `docker-compose`, and `docker-machine` on your machine.
 
-If you want to run the test suite, simply start up all the docker containers via:
+##### Linux
 
-- `docker-compose up -d`
+Use your distribution's package manager to install `docker` and `docker-compose`.
 
-Then you can setup the test database:
- - `docker-compose run -e "RAILS_ENV=test" web rake db:create && rake db:migrate`
+### Step 2: Get Hydranorth source code
+Clone the hydranorth repository from github:
+```shell
+git clone git@github.com:ualbertalib/HydraNorth.git
+```
 
-Then you can run the test suite via rspec:
- - `docker-compose run -e "RAILS_ENV=test" web rspec`
+### Step 3: Start docker and docker compose
+
+To build, create, start and setup your docker containers simply run:
+```shell
+docker-compose up -d
+```
+(will take awhile on first try, as it needs to download and provision everything, so maybe go for a coffee)
+
+Now that everything is up and running, you can setup the rails database (only need to be done once):
+```shell
+docker-compose run web rake db:setup
+```
+
+### Step 4: Open and view ERA!
+Now everything is ready, you can go and view ERA! Just open your favorite browser and go to the following url:
+
+[localhost:9000](localhost:9000)
+
+(Note: ip address may be different if you are using `docker-machine`)
+
+(Also feel free to change the port in the docker-compose file, this default was chosen so that it does not conflict if you already have a rails server running (which by default uses port 3000))
+
+### Want to run the test suite?
+
+1. Start up all the docker containers, like you did above (if its not already running):
+
+  ```shell
+  docker-compose up -d
+  ```
+
+2. Setup the test database (only need to be done once):
+  ```shell
+  docker-compose run -e "RAILS_ENV=test" web rake db:create && rake db:migrate
+  ```
+
+3. Then you can run the test suite via rspec:
+  ```shell
+  docker-compose run -e "RAILS_ENV=test" web rspec
+  ```
 
 ### Common gotchas?
 
-1. We are reusing the same solr for test and dev. This may cause issues between data. This shouldn't matter to much, but just be away of this if things are getting corrupted. So for example if you rake db:setup the development environment, do not rake db:setup the test environment as the seeds will fail when interacting with collection/active fedora objmects. You do not need the seeds for test environment anyways. Simply just use `db:create && rake db:migrate`
+- We are reusing the same solr for test and dev. This may cause issues between data. This shouldn't matter to much, but just be aware of this if things are getting mangled. So for example if you `rake db:setup` the development environment, do not `rake db:setup` the test environment as the seeds will fail when interacting with collection/active fedora objects. But you do not need the seeds for test environment anyways. Simply just use `db:create && rake db:migrate
+`
 
-2. If your having issues, logs are the best place to first look at what has went wrong:
+- If your having issues, logs are the best place to first look at what went wrong.
 
-- `docker-compose logs` to check all container logs
+  To check all container logs:
 
-Better yet you can check an individual container log by supplying the container name to the previous command as such:
-- `docker-compose logs web`
+  ```shell
+  docker-compose logs
+  ```
 
-3. Common issue could be the webpage is not rendering when you go to `localhost:9000`. This could be server hasn't started due to a bad stop and exiting of the container, thus leaving a pid file in the tmp directory. To fix this, cleanup the pid file via:
+  Better yet you can check an individual container log by supplying the container name to the previous command. For example if I want to see the web container logs:
 
-- `sudo rm -rf /tmp/pids/server.pid`
+  ```shell
+  docker-compose logs web
+  ```
 
-4. Docker can be resource intensive. Test may fail due to slowness/timeouts. As well when attempting to provison the database, this may fail due to Mysql container not being fully initialized at the right moment. Simply wait, or close some other processes.
+- One common issue could be the webpage is not rendering when you go to [localhost:9000](localhost:9000). This probably due to the server not being started due to a bad stop and exiting of the container from a previous run. Which causes the server from leaving a pid file in the tmp directory. To fix this, cleanup the pid file via:
+
+  ```shell
+  sudo rm -rf /tmp/pids/server.pid
+  ```
+
+- Docker can be resource intensive. Test may fail due to slowness/timeouts. As well when attempting to provision the database, this may fail due to Mysql container not being fully initialized at the right moment. Simply wait, or close some other processes. Shouldn't be a very big issue but just keep this in mind.
 
 Batch ingest
 ---
