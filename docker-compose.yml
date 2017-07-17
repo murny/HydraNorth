@@ -22,15 +22,12 @@ services:
     image: murny/docker-solr-legacy:5.4
     # Uncomment this if you want to access SOLR's web interface
     # ports:
-    #   - "9393:8983"
+    #   - "8983:8983"
     volumes:
       - solr:/opt/solr/server/solr/mycores
       - ./solr_conf/conf:/config
-    entrypoint:
-      - docker-entrypoint.sh
-      - solr-precreate
-      - mycore
-      - /config
+      - ./solr_conf/scripts/solr-precreate-hydranorth.sh:/docker-entrypoint-initdb.d/solr-precreate-hydranorth.sh
+
 
   fcrepo:
     image: murny/docker-fcrepo4:4.2
@@ -38,7 +35,7 @@ services:
       - fcrepo:/fcrepo4-data
     # Uncomment this if you want to access Fedora's web interface
     # ports:
-    #   - "9080:8080"
+    #   - "8080:8080"
 
   redis:
     image: redis:alpine
@@ -48,19 +45,20 @@ services:
   web:
     build: .
     image: ualbertalib/hydranorth
+    command: bash -c 'rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b "0.0.0.0"'
     environment:
       RAILS_ENV: development
       # EZID_PASSWORD: uncomment and add this if you want DOIs
       DATABASE_URL: 'mysql2://:mysecretpassword@mysql/'
       FCREPO_URL: http://fcrepo:8080/fcrepo/rest
-      SOLR_URL: http://solr:8983/solr/mycore
+      SOLR_URL: http://solr:8983/solr/development
+      SOLR_TEST_URL: http://solr:8983/solr/test
       REDIS_URL: 'redis://redis/1'
     volumes:
       - .:/app
-    # picked a random port (sometimes people are running rails on port 3000 already)
     ports:
-      - "9000:3000"
-    links:
+      - "3000:3000"
+    depends_on:
       - mysql
       - fcrepo
       - redis
@@ -75,11 +73,12 @@ services:
       # EZID_PASSWORD: uncomment and add this if you want DOIs
       DATABASE_URL: 'mysql2://:mysecretpassword@mysql/'
       FCREPO_URL: http://fcrepo:8080/fcrepo/rest
-      SOLR_URL: http://solr:8983/solr/mycore
+      SOLR_URL: http://solr:8983/solr/development
+      SOLR_TEST_URL: http://solr:8983/solr/test
       REDIS_URL: 'redis://redis/1'
     volumes:
       - .:/app
-    links:
+    depends_on:
       - mysql
       - fcrepo
       - redis

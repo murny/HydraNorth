@@ -144,6 +144,7 @@ Use your distribution's package manager to install `docker` and `docker-compose`
 Clone the hydranorth repository from github:
 ```shell
 git clone git@github.com:ualbertalib/HydraNorth.git
+cd HydraNorth
 ```
 
 ### Step 3: Start docker and docker compose
@@ -152,7 +153,6 @@ To build, create, start and setup your docker containers simply run:
 ```shell
 docker-compose up -d
 ```
-(will take awhile on first try, as it needs to download and provision everything, so maybe go for a coffee)
 
 Now that everything is up and running, you can setup the rails database (only need to be done once):
 ```shell
@@ -160,13 +160,11 @@ docker-compose run web rake db:setup
 ```
 
 ### Step 4: Open and view ERA!
-Now everything is ready, you can go and view ERA! Just open your favorite browser and go to the following url:
+Now everything is ready, you can go and view HydraNorth! Just open your favorite browser and go to the following url:
 
-[localhost:9000](localhost:9000)
+[localhost:3000](http://localhost:3000)
 
 (Note: ip address may be different if you are using `docker-machine`)
-
-(Also feel free to change the port in the docker-compose file, this default was chosen so that it does not conflict if you already have a rails server running (which by default uses port 3000))
 
 ### Want to run the test suite?
 
@@ -178,7 +176,7 @@ Now everything is ready, you can go and view ERA! Just open your favorite browse
 
 2. Setup the test database (only need to be done once):
   ```shell
-  docker-compose run -e "RAILS_ENV=test" web rake db:create && rake db:migrate
+  docker-compose run -e "RAILS_ENV=test" web rake db:setup
   ```
 
 3. Then you can run the test suite via rspec:
@@ -187,9 +185,6 @@ Now everything is ready, you can go and view ERA! Just open your favorite browse
   ```
 
 ### Common gotchas?
-
-- We are reusing the same solr for test and dev. This may cause issues between data. This shouldn't matter to much, but just be aware of this if things are getting mangled. So for example if you `rake db:setup` the development environment, do not `rake db:setup` the test environment as the seeds will fail when interacting with collection/active fedora objects. But you do not need the seeds for test environment anyways. Simply just use `db:create && rake db:migrate
-`
 
 - If your having issues, logs are the best place to first look at what went wrong.
 
@@ -203,12 +198,6 @@ Now everything is ready, you can go and view ERA! Just open your favorite browse
 
   ```shell
   docker-compose logs web
-  ```
-
-- One common issue could be the webpage is not rendering when you go to [localhost:9000](localhost:9000). This probably due to the server not being started due to a bad stop and exiting of the container from a previous run. Which causes the server from leaving a pid file in the tmp directory. To fix this, cleanup the pid file via:
-
-  ```shell
-  sudo rm -rf /tmp/pids/server.pid
   ```
 
 - Docker can be resource intensive. Test may fail due to slowness/timeouts. As well when attempting to provision the database, this may fail due to Mysql container not being fully initialized at the right moment. Simply wait, or close some other processes. Shouldn't be a very big issue but just keep this in mind.

@@ -11,11 +11,8 @@ VCR.configure do |config|
 
   # Only want VCR to intercept requests to external URLs.
   config.ignore_localhost = true
-
   # Ignore any solr/fedora requests
   config.ignore_request do |request|
-    if ENV['FCREPO_URL'] ||  ENV['SOLR_URL']
-      request.uri.include?(ENV['FCREPO_URL']) || request.uri.include?(ENV['SOLR_URL'])
-    end
+    request.uri.match(/#{ENV['FCREPO_URL']}|#{ENV['SOLR_TEST_URL']}/) if ENV['FCREPO_URL'] && ENV['SOLR_TEST_URL']
   end
 end
